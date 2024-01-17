@@ -7,14 +7,14 @@ import {
 	BrnAccordionContentComponent,
 	BrnAccordionDirective,
 	BrnAccordionItemDirective,
-	BrnAccordionTriggerComponent,
+	BrnAccordionTriggerDirective,
 } from '@spartan-ng/ui-accordion-brain';
 import {
 	HlmAccordionContentDirective,
 	HlmAccordionDirective,
 	HlmAccordionIconDirective,
 	HlmAccordionItemDirective,
-	HlmAccordionTriggerDirective,
+	HlmAccordionTriggerComponent,
 } from '@spartan-ng/ui-accordion-helm';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
@@ -49,12 +49,12 @@ export const routeMeta: RouteMeta = {
 		BrnAccordionDirective,
 		BrnAccordionContentComponent,
 		BrnAccordionItemDirective,
-		BrnAccordionTriggerComponent,
+		BrnAccordionTriggerDirective,
 		HlmAccordionContentDirective,
 		HlmAccordionDirective,
 		HlmAccordionIconDirective,
 		HlmAccordionItemDirective,
-		HlmAccordionTriggerDirective,
+		HlmAccordionTriggerComponent,
 		RouterLink,
 		PageNavComponent,
 		PageNavLinkComponent,
@@ -128,38 +128,38 @@ export const routeMeta: RouteMeta = {
 			<spartan-section-sub-heading id="faq">FAQ</spartan-section-sub-heading>
 			<div hlmAccordion>
 				<div hlmAccordionItem>
-					<button hlmAccordionTrigger>
+					<hlm-accordion-trigger>
 						<span>What is spartan/stack</span>
 						<hlm-icon hlmAccIcon />
-					</button>
+					</hlm-accordion-trigger>
 					<brn-accordion-content hlm>
 						It is a collection of full-stack technologies that power end-to-end type-safe Angular development.
 					</brn-accordion-content>
 				</div>
 
 				<div hlmAccordionItem>
-					<button hlmAccordionTrigger>
+					<hlm-accordion-trigger>
 						<span>What is spartan/ui</span>
 						<hlm-icon hlmAccIcon />
-					</button>
+					</hlm-accordion-trigger>
 					<brn-accordion-content hlm>
 						A collection of Angular UI primitives that are both beautiful and accessible.
 					</brn-accordion-content>
 				</div>
 				<div hlmAccordionItem>
-					<button hlmAccordionTrigger>
+					<hlm-accordion-trigger>
 						<span>What is spartan/ui/brain</span>
 						<hlm-icon hlmAccIcon />
-					</button>
+					</hlm-accordion-trigger>
 					<brn-accordion-content hlm>
 						A collection of unstyled UI primitives that provide accessibility out of the box.
 					</brn-accordion-content>
 				</div>
 				<div hlmAccordionItem>
-					<button hlmAccordionTrigger>
+					<hlm-accordion-trigger>
 						<span>What is spartan/ui/helm</span>
 						<hlm-icon hlmAccIcon />
-					</button>
+					</hlm-accordion-trigger>
 					<brn-accordion-content hlm>
 						Directives, sometimes additional components, that give spartan/brain a shadcn look.
 					</brn-accordion-content>
