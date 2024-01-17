@@ -5,7 +5,6 @@ import {
 	Directive,
 	ElementRef,
 	Input,
-	NgZone,
 	OnDestroy,
 	QueryList,
 	computed,
@@ -32,13 +31,13 @@ const VERTICAL_KEYS_TO_PREVENT_DEFAULT = ['ArrowUp', 'ArrowDown', 'PageDown', 'P
 	host: {
 		'[attr.data-state]': 'state()',
 		'[attr.data-orientation]': 'orientation',
+		'(keydown)': 'keydownHandler($event)',
 	},
 })
 export class BrnAccordionDirective implements AfterContentInit, OnDestroy {
 	private readonly _el = inject(ElementRef);
 	private _keyManager?: FocusKeyManager<BrnAccordionTriggerDirective>;
 	private _focusMonitor = inject(FocusMonitor);
-	private _ngZone = inject(NgZone);
 
 	private readonly _focused = signal<boolean>(false);
 	private readonly _openItemIds = signal<number[]>([]);
@@ -55,7 +54,8 @@ export class BrnAccordionDirective implements AfterContentInit, OnDestroy {
 	@Input()
 	public orientation: 'horizontal' | 'vertical' = 'vertical';
 
-	public ngAfterContentInit() {
+	ngAfterContentInit(): void {
+		console.log(this.triggers);
 		if (!this.triggers) {
 			return;
 		}
@@ -67,10 +67,10 @@ export class BrnAccordionDirective implements AfterContentInit, OnDestroy {
 		if (this.orientation === 'horizontal') {
 			this._keyManager.withHorizontalOrientation(this.dir ?? 'ltr').withVerticalOrientation(false);
 		}
-		this._el.nativeElement.addEventListener('keydown', (event: KeyboardEvent) => {
-			this._keyManager?.onKeydown(event as KeyboardEvent);
-			this.preventDefaultEvents(event as KeyboardEvent);
-		});
+		// this._el.nativeElement.addEventListener('keydown', (event: KeyboardEvent) => {
+		// 	this._keyManager?.onKeydown(event as KeyboardEvent);
+		// 	this.preventDefaultEvents(event as KeyboardEvent);
+		// });
 		this._focusMonitor.monitor(this._el, true).subscribe((origin) => this._focused.set(origin !== null));
 	}
 
@@ -79,7 +79,6 @@ export class BrnAccordionDirective implements AfterContentInit, OnDestroy {
 	}
 
 	public setActiveItem(item: BrnAccordionTriggerDirective) {
-		// public setActiveItem(item: number) {
 		this._keyManager?.setActiveItem(item);
 	}
 
@@ -91,6 +90,12 @@ export class BrnAccordionDirective implements AfterContentInit, OnDestroy {
 			this._openItemIds.set([]);
 		}
 		this._openItemIds.update((ids) => [...ids, id]);
+	}
+
+	keydownHandler(event: KeyboardEvent): void {
+		console.log('Lol', event);
+		this._keyManager?.onKeydown(event as KeyboardEvent);
+		this.preventDefaultEvents(event as KeyboardEvent);
 	}
 
 	private preventDefaultEvents(event: KeyboardEvent) {
