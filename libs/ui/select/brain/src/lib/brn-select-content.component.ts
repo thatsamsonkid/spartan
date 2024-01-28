@@ -1,5 +1,5 @@
 import { CdkListbox, ListboxValueChangeEvent } from '@angular/cdk/listbox';
-import { NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import {
 	ChangeDetectionStrategy,
 	Component,
@@ -11,7 +11,7 @@ import {
 	inject,
 	signal,
 } from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs';
 import { BrnSelectOptionDirective } from './brn-select-option.directive';
 import { BrnSelectScrollDownDirective } from './brn-select-scroll-down.directive';
@@ -22,7 +22,7 @@ import { BrnSelectService } from './brn-select.service';
 @Component({
 	selector: 'brn-select-content, hlm-select-content:not(noHlm)',
 	standalone: true,
-	imports: [BrnSelectScrollUpDirective, BrnSelectScrollDownDirective, NgTemplateOutlet],
+	imports: [BrnSelectScrollUpDirective, BrnSelectScrollDownDirective, NgTemplateOutlet, AsyncPipe],
 	hostDirectives: [CdkListbox],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: {
@@ -51,6 +51,11 @@ import { BrnSelectService } from './brn-select.service';
 		`,
 	],
 	template: `
+		@if ({
+			listboxValueChange: listboxValueChange$ | async,
+			multiple: multiple$ | async,
+			isExpanded: isExpanded$ | async
+		}) {}
 		<ng-template #scrollUp><ng-content select="hlm-select-scroll-up" /></ng-template>
 		<ng-container *ngTemplateOutlet="canScrollUp() && scrollUpBtn ? scrollUp : null"></ng-container>
 		<div
@@ -76,7 +81,19 @@ export class BrnSelectContentComponent {
 
 	protected labelledBy = this._selectService.labelId;
 	protected id = this._selectService.id;
-	protected multiple$ = toObservable(this._selectService.multiple);
+
+	protected listboxValueChange$ = this._cdkListbox.valueChange
+		.asObservable()
+		.pipe(tap((val: ListboxValueChangeEvent<unknown>) => this._selectService.listBoxValueChangeEvent$.next(val)));
+
+	protected isExpanded$ = toObservable(this._selectService.isExpanded).pipe(
+		tap((isExpanded) => isExpanded && setTimeout(() => this.updateArrowDisplay())),
+	);
+
+	protected multiple$ = toObservable(this._selectService.multiple).pipe(
+		tap((multiple) => (this._cdkListbox.multiple = multiple)),
+	);
+
 	protected canScrollUp = signal(false);
 	protected canScrollDown = signal(false);
 
@@ -91,31 +108,6 @@ export class BrnSelectContentComponent {
 
 	@ContentChildren(BrnSelectOptionDirective, { descendants: true })
 	protected _options!: QueryList<BrnSelectOptionDirective>;
-
-	constructor() {
-		this._cdkListbox.valueChange
-			.asObservable()
-			.pipe(
-				takeUntilDestroyed(),
-				tap((val: ListboxValueChangeEvent<unknown>) => this._selectService.listBoxValueChangeEvent$.next(val)),
-			)
-			.subscribe();
-
-		this.multiple$
-			.pipe(
-				takeUntilDestroyed(),
-				tap((multiple) => (this._cdkListbox.multiple = multiple)),
-			)
-			.subscribe();
-
-		toObservable(this._selectService.isExpanded)
-			.pipe(takeUntilDestroyed())
-			.subscribe((isExpanded) => {
-				if (isExpanded) {
-					setTimeout(() => this.updateArrowDisplay());
-				}
-			});
-	}
 
 	updateArrowDisplay(): void {
 		this.canScrollUp.set(this.viewport.nativeElement.scrollTop > 0);
