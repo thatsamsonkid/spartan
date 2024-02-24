@@ -1,6 +1,7 @@
 import { RouteMeta } from '@analogjs/router';
 import { Component } from '@angular/core';
 import { hlmH4 } from '@spartan-ng/ui-typography-helm';
+import { APITableComponent, PropDetails } from '~/app/shared/layout/api-table.component';
 import { CodePreviewDirective } from '../../../../shared/code/code-preview.directive';
 import { CodeComponent } from '../../../../shared/code/code.component';
 import { MainSectionDirective } from '../../../../shared/layout/main-section.directive';
@@ -36,12 +37,12 @@ export const routeMeta: RouteMeta = {
 		SelectPreviewComponent,
 		SelectMultiplePreviewComponent,
 		SelectScrollablePreviewComponent,
+		APITableComponent,
 	],
 	template: `
 		<section spartanMainSection>
 			<spartan-section-intro name="Select" lead="Select a value from a list of options." />
-
-			<spartan-tabs firstTab="Preview" secondTab="Code">
+			<spartan-tabs firstTab="Preview" secondTab="Code" thirdTab="API">
 				<div spartanCodePreview firstTab>
 					<spartan-select-preview />
 				</div>
@@ -59,6 +60,13 @@ export const routeMeta: RouteMeta = {
 				<spartan-code [code]="defaultImports" />
 				<spartan-code [code]="defaultSkeleton" />
 			</div>
+
+			<spartan-section-sub-heading id="api">API</spartan-section-sub-heading>
+			<h3 id="examples__select-root" class="${hlmH4} mb-2 mt-6">Select Root - (Brn-Select)</h3>
+			<spartan-api-table [api]="api" />
+
+			<h3 id="examples__select-trigger" class="${hlmH4} mb-2 mt-6">Select Trigger - (Brn-Trigger)</h3>
+			<spartan-api-table [api]="triggerBtnApi" />
 
 			<spartan-section-sub-heading id="examples">Examples</spartan-section-sub-heading>
 			<h3 id="examples__multiple" class="${hlmH4} mb-2 mt-6">Multiple</h3>
@@ -90,4 +98,32 @@ export default class SkeletonPageComponent {
 	protected readonly defaultImports = defaultImports;
 	protected readonly multipleCode = multipleCode;
 	protected readonly scrollableCode = scrollableCode;
+
+	api: PropDetails[] = [
+		{
+			name: 'disabled',
+			type: 'boolean',
+		},
+		{
+			name: 'placeholder',
+			type: 'string',
+		},
+		{
+			name: 'multiple',
+			default: 'false',
+			type: 'boolean',
+		},
+		{
+			name: 'dir',
+			default: 'ltr',
+			type: "'ltr' || 'rtl'",
+		},
+	];
+
+	triggerBtnApi: PropDetails[] = [
+		{
+			name: 'transformFn',
+			type: 'Function',
+		},
+	];
 }

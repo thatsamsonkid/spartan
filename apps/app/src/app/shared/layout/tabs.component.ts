@@ -26,6 +26,7 @@ const tabContent =
 			>
 				<button class="${tabBtn}" [brnTabsTrigger]="firstTab">{{ firstTab }}</button>
 				<button class="${tabBtn}" [brnTabsTrigger]="secondTab">{{ secondTab }}</button>
+				<button class="${tabBtn}" [brnTabsTrigger]="thirdTab">{{ thirdTab }}</button>
 			</div>
 			<div class="${tabContent}" [brnTabsContent]="firstTab">
 				<ng-content select="[firstTab]" />
@@ -33,6 +34,11 @@ const tabContent =
 			<div class="${tabContent}" [brnTabsContent]="secondTab">
 				<ng-content select="[secondTab]" />
 			</div>
+			@if (thirdTab) {
+				<div [brnTabsContent]="thirdTab">
+					<ng-content select="[thirdTab]" />
+				</div>
+			}
 		</div>
 	`,
 })
@@ -41,4 +47,6 @@ export class TabsComponent {
 	firstTab = '';
 	@Input()
 	secondTab = '';
+	@Input()
+	thirdTab = '';
 }
