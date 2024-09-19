@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate, moduleMetadata } from '@storybook/angular';
 import { BrnCalendarImports } from './brain/src';
-import { provideSpartanDateLibrary } from './brain/src/lib/agnostic-date-ops/default-provider';
+// import { provideSpartanDateLibrary } from './brain/src/lib/agnostic-date-ops/default-provider';
 import { type HlmCalendarComponent, HlmCalendarImports } from './helm/src';
 import { MaterialStyleCalendarComponent } from './mocks/material-style.calendar';
 import { ReactDayCalendarComponent } from './mocks/react-daypicker-style.calendar';
@@ -13,7 +13,7 @@ const meta: Meta<HlmCalendarComponent> = {
 	decorators: [
 		moduleMetadata({
 			imports: [HlmCalendarImports, BrnCalendarImports, MaterialStyleCalendarComponent, ReactDayCalendarComponent],
-			providers: [provideSpartanDateLibrary()],
+			// providers: [provideSpartanDateLibrary()],
 		}),
 	],
 };
