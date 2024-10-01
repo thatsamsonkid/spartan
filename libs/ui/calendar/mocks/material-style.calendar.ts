@@ -2,23 +2,8 @@ import { Component, type OnInit, inject } from '@angular/core';
 import { provideIcons } from '@ng-icons/core';
 import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import {
-	BrnCalendarDaysOfTheWeekComponent,
-	BrnCalendarDirective,
-	BrnCalendarDisplayComponent,
-	BrnCalendarHeaderDirective,
-	BrnCalendarMonthYearComponent,
-	BrnCalendarNextBtnDirective,
-	BrnCalendarPreviousBtnDirective,
-	BrnCalendarService,
-	BrnCalendarTableBodyComponent,
-	BrnCalendarViewSwitcherComponent,
-	BrnCalendarYearDisplayComponent,
-} from '../brain/src';
-import { HlmCalendarDayCellDirective } from '../helm/src';
-import { HlmCalendarHeaderComponent } from '../helm/src/lib/hlm-calendar-header.component';
-import { HlmCalendarNextButtonDirective } from '../helm/src/lib/hlm-calendar-next-button.directive';
-import { HlmCalendarPreviousButtonDirective } from '../helm/src/lib/hlm-calendar-previous-button.directive';
+import { BrnCalendarDirective, BrnCalendarModule, BrnCalendarService } from '../brain/src';
+import { HlmCalendarModule } from '../helm/src';
 
 @Component({
 	selector: 'hlm-material-calendar',
@@ -27,23 +12,7 @@ import { HlmCalendarPreviousButtonDirective } from '../helm/src/lib/hlm-calendar
 	host: {
 		class: 'block p-3 rounded-md border max-w-fit',
 	},
-	imports: [
-		BrnCalendarDirective,
-		BrnCalendarHeaderDirective,
-		BrnCalendarViewSwitcherComponent,
-		BrnCalendarMonthYearComponent,
-		BrnCalendarPreviousBtnDirective,
-		BrnCalendarNextBtnDirective,
-		BrnCalendarYearDisplayComponent,
-		BrnCalendarDisplayComponent,
-		HlmCalendarHeaderComponent,
-		HlmCalendarPreviousButtonDirective,
-		HlmCalendarNextButtonDirective,
-		BrnCalendarDaysOfTheWeekComponent,
-		BrnCalendarTableBodyComponent,
-		HlmCalendarDayCellDirective,
-		HlmIconComponent,
-	],
+	imports: [BrnCalendarModule, HlmCalendarModule, HlmIconComponent],
 	providers: [provideIcons({ lucideChevronLeft, lucideChevronRight })],
 	template: `
 		<div class="flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0">
