@@ -8,21 +8,23 @@ export class BrnCalendarService {
 		id: string;
 		mode: 'single' | 'multiple' | 'range';
 		selectedDate: Date | null;
+		selectedYear: Date | null;
 		minDate: Date | null;
 		maxDate: Date | null;
 		startAt: Date | null;
-		startView: 'month' | 'year';
+		startView: 'month' | 'months' | 'year';
 		dateFilter?: (d: Date) => boolean | null;
 		daysOfTheWeek: string[];
 		currentMonthYear: Date | null;
 		currentMonthYearDays: Array<Array<Date | null>> | null;
 		locale: string;
 		years: Date[][] | null;
-		view: 'month' | 'year';
+		view: 'month' | 'months' | 'year';
 	}>({
 		id: '',
 		mode: 'single',
 		selectedDate: null,
+		selectedYear: null,
 		minDate: null,
 		maxDate: null,
 		startAt: null,
@@ -30,15 +32,15 @@ export class BrnCalendarService {
 		daysOfTheWeek: [],
 		currentMonthYear: null,
 		currentMonthYearDays: null,
-		years: [],
-		// Only default value
-		locale: 'en-US',
+		years: [], // Array for keeping the current years for given year range
+		locale: 'en-US', // Only default value
 		view: 'month',
 	});
 
 	public readonly id = computed(() => this.state().id);
 	public readonly mode = computed(() => this.state().mode);
 	public readonly selectedDate = computed(() => this.state().selectedDate);
+	public readonly selectedYear = computed(() => this.state().selectedYear);
 	public readonly minDate = computed(() => this.state().minDate);
 	public readonly maxDate = computed(() => this.state().maxDate);
 	public readonly startAt = computed(() => this.state().startAt);
@@ -139,6 +141,36 @@ export class BrnCalendarService {
 		}));
 	}
 
+	public updateSelectedDate(selectedDate: Date): void {
+		this.state.update((state) => ({
+			...state,
+			selectedDate,
+		}));
+	}
+
+	public updateSelectedYear(selectedYear: number): void {
+		// Mat lib defaults to emitting month and year selections with
+		// the current selected date. if null assumes first day of year
+		this.state.update((state) => {
+			// if selected date null assume new brand new date with selected year
+			if (!state.selectedDate) {
+				return {
+					...state,
+					selectedYear: new Date(selectedYear, 0, 1),
+					view: 'months',
+				};
+			}
+			// use selectedDate as base date to emit newly selected year
+			const newlySelectedDateYear = new Date(state.selectedDate.getTime());
+			newlySelectedDateYear.setFullYear(selectedYear);
+			return {
+				...state,
+				selectedYear: newlySelectedDateYear,
+				view: 'months',
+			};
+		});
+	}
+
 	/**
 	 * Methods
 	 */
@@ -194,6 +226,26 @@ export class BrnCalendarService {
 		return calendar;
 	}
 
+	generateMonthsArray() {
+		// Try to get year from 1 of 2 locations otherwise any year is fine
+		const year = this.selectedDate()?.getFullYear() || this.selectedYear()?.getFullYear() || 2024;
+		const monthsArray = [];
+		let monthIndex = 0; // Months are zero-indexed in JavaScript Date objects
+
+		for (let row = 0; row < 3; row++) {
+			const rowArray = [];
+			for (let col = 0; col < 4; col++) {
+				// Create a Date object for the first day of the current month
+				const date = new Date(year, monthIndex, 1);
+				rowArray.push(date);
+				monthIndex++;
+			}
+			monthsArray.push(rowArray);
+		}
+
+		return monthsArray;
+	}
+
 	public updateCalendar(newMonthDate: Date): void {
 		const daysInMonth = this._dateService.getDaysInMonth(newMonthDate);
 
@@ -221,6 +273,27 @@ export class BrnCalendarService {
 		calendar.push(week);
 
 		this.updateCurrentMonthYearDays(calendar);
+	}
+
+	public updateSelection(value: any) {
+		console.log(value);
+		//1. Depending on current view emit correct event
+		//2. if month-day-view emit date selections
+		// const currentMonthYear = this.currentMonthYear();
+		if (this.view() === 'months') {
+			// const newMonthDate = this._dateService.adjustMonth(currentMonthYear, 1);
+			// this.updateCurrentMonthYear(newMonthDate);
+			// this.updateCalendar(newMonthDate);
+		} else if (this.view() === 'year') {
+			this.updateSelectedYear(value);
+			// const newYearDate = this._dateService.addCalendarYears(currentMonthYear, this.yearsPerPage);
+			// this.updateCurrentMonthYear(newYearDate);
+			// this.generateYears();
+			// console.log(this.years());
+		} else {
+			// Assume day view
+			this.updateSelectedDate(value);
+		}
 	}
 
 	public onNext(): void {

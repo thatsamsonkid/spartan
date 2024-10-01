@@ -1,8 +1,7 @@
+import { BrnCalendarImports } from '@spartan-ng/ui-calendar-brain';
+import { type HlmCalendarComponent, HlmCalendarImports } from '@spartan-ng/ui-calendar-helm';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate, moduleMetadata } from '@storybook/angular';
-import { BrnCalendarImports } from './brain/src';
-// import { provideSpartanDateLibrary } from './brain/src/lib/agnostic-date-ops/default-provider';
-import { type HlmCalendarComponent, HlmCalendarImports } from './helm/src';
 import { MaterialStyleCalendarComponent } from './mocks/material-style.calendar';
 import { ReactDayCalendarComponent } from './mocks/react-daypicker-style.calendar';
 
@@ -23,9 +22,9 @@ type Story = StoryObj<HlmCalendarComponent>;
 
 export const Default: Story = {
 	render: (args) => ({
-		props: { ...args },
+		props: { ...args, outputFn: ($event: unknown) => console.log('External', $event) },
 		template: /* HTML */ `
-			<hlm-calendar ${argsToTemplate(args)}/>
+			<hlm-calendar ${argsToTemplate(args)} (selectedChange)="outputFn($event)"/>
 		`,
 	}),
 };

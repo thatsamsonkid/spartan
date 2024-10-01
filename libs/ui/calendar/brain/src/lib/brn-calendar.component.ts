@@ -80,7 +80,7 @@ export class BrnCalendarComponent implements OnInit {
 	view = this._brnCalendarService.view;
 
 	monthSelected = output();
-	selectedChange = output();
+	selectedChange = output<Date | null>();
 	viewChanged = output();
 	yearSelected = output();
 
@@ -102,14 +102,6 @@ export class BrnCalendarComponent implements OnInit {
 
 	// @Output()
 	// yearSelected: EventEmitter<D>
-
-	// Emits the year chosen in multiyear view. This doesn't imply a change on the selected date.
-
-	constructor() {
-		// effect(() => {
-		// this.selectedChange.emit(this._brnCalendarService.);
-		// });
-	}
 
 	ngOnInit(): void {
 		this._brnCalendarService.state.update((state) => ({

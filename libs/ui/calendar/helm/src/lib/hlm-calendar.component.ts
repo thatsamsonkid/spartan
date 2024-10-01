@@ -15,6 +15,7 @@ import {
 	BrnCalendarYearDisplayComponent,
 } from '@spartan-ng/ui-calendar-brain';
 import { HlmIconComponent, provideIcons } from '@spartan-ng/ui-icon-helm';
+import { HlmCalendarDayCellDirective } from './hlm-calendar-day-cell.directive';
 import { HlmCalendarHeaderComponent } from './hlm-calendar-header.component';
 import { HlmCalendarNextButtonDirective } from './hlm-calendar-next-button.directive';
 import { HlmCalendarPreviousButtonDirective } from './hlm-calendar-previous-button.directive';
@@ -22,7 +23,7 @@ import { HlmCalendarPreviousButtonDirective } from './hlm-calendar-previous-butt
 @Component({
 	selector: 'hlm-calendar',
 	standalone: true,
-	hostDirectives: [BrnCalendarDirective],
+	hostDirectives: [{ directive: BrnCalendarDirective, outputs: ['selectedChange:selectedChange'] }],
 	host: {
 		class: 'block p-3 rounded-md border max-w-fit',
 	},
@@ -40,6 +41,7 @@ import { HlmCalendarPreviousButtonDirective } from './hlm-calendar-previous-butt
 		HlmCalendarHeaderComponent,
 		HlmCalendarPreviousButtonDirective,
 		HlmCalendarNextButtonDirective,
+		HlmCalendarDayCellDirective,
 		HlmIconComponent,
 		NgClass,
 	],
@@ -72,10 +74,26 @@ import { HlmCalendarPreviousButtonDirective } from './hlm-calendar-previous-butt
 			<!-- <brn-calendar-month-dropdown/>
 			<brn-calendar-year-dropdown>-->
 		</brn-calendar-header>
+			<ng-template #yearCellTemplate let-year>
+				@if(year){
+                 <td class="rounded-md w-9 font-normal text-[0.8rem]" role="presentation">
+					<button  class="w-full" hlmCalendarDayCell [value]="year?.getFullYear()">
+						{{year?.getFullYear()}}
+					</button>
+				</td>
+				} @else {
+                <td class="w-9" role="presentation"></td>
+				}
+			</ng-template>
 
 		<!-- Maybe change this month display  -->
 		 @if(view() === 'year'){
-			<brn-calendar-year-display hlm/>	
+			<table brnCalendarDisplay class="w-full border-collapse space-y-1 flex flex-col">
+				<brn-calendar-year-display [yearTemplate]="yearCellTemplate" hlm/>
+		 	</table>
+
+		 } @else if(view() === 'months') { 
+			<p>Months of the year</p>
 		 } @else {
 			<!-- Add a hlm weekdaycell directive
 			Add a hlm dayCell directive
@@ -87,16 +105,14 @@ import { HlmCalendarPreviousButtonDirective } from './hlm-calendar-previous-butt
 				<brn-calendar-table-body [dayCellTemplate]="dayOfMonthTemplate" hlm/>
 		 	</table>
 
-						<ng-template #dayOfWeekTemplate let-weekday>
+			<ng-template #dayOfWeekTemplate let-weekday>
                  <th class="text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]">{{weekday}}</th>
 			</ng-template>
 
 			<ng-template #dayOfMonthTemplate let-day let-isToday="isToday">
 				@if(day){
                  <td class="rounded-md w-9 font-normal text-[0.8rem]" role="presentation">
-					<button role="gridcell" type="buttons" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 w-9 p-0 font-normal aria-selected:opacity-100" 
-
-					[class.bg-accent]="isToday">
+					<button  hlmCalendarDayCell [value]="day" [class.bg-accent]="isToday">
 						{{day?.getDate()}}
 					</button>
 				</td>
@@ -104,14 +120,11 @@ import { HlmCalendarPreviousButtonDirective } from './hlm-calendar-previous-butt
                 <td class="w-9" role="presentation"></td>
 				}
 			</ng-template>
-						<!-- 1. Option one 
-				- Single top level component
-				- pro: simple
-				- con: styles would need to be passed as inputs to underlying elements -->
-			<!-- <brn-calendar-display hlm class="w-full border-collapse space-y-1" [dayOfWeekCelltemplate]="dayOfWeekTemplate" [dayCellTemplate]="dayOfMonthTemplate"/> -->
+
+
 		 }
 		</div>
-		</div>
+	</div>
 		`,
 })
 export class HlmCalendarComponent {

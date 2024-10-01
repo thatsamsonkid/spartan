@@ -1,11 +1,11 @@
-import { NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, type TemplateRef, computed, inject, input } from '@angular/core';
 import { BrnCalendarService } from './brn-calendar.service';
 
 @Component({
 	selector: 'brn-calendar-table-body',
 	standalone: true,
-	imports: [NgComponentOutlet, NgTemplateOutlet],
+	imports: [NgTemplateOutlet],
 	styles: [
 		`:host: {
         display: contents;

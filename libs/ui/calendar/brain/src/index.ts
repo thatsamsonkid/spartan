@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { BrnCalendarCellDirective } from './lib/brn-calendar-cell.directive';
 // import { provideSpartanDateLibrary } from './lib/agnostic-date-ops/default-provider';
 import { BrnCalendarDaysOfTheWeekComponent } from './lib/brn-calendar-days-of-the-week';
 import { BrnCalendarDisplayComponent } from './lib/brn-calendar-display.component';
@@ -24,6 +25,7 @@ export * from './lib/brn-calendar-month-year.component';
 export * from './lib/brn-calendar.directive';
 export * from './lib/brn-calendar-table-body';
 export * from './lib/brn-calendar-days-of-the-week';
+export * from './lib/brn-calendar-cell.directive';
 
 // export * from './lib/agnostic-date-ops/date.module';
 export * from './lib/agnostic-date-ops/date.service';
@@ -41,6 +43,7 @@ export const BrnCalendarImports = [
 	BrnCalendarViewSwitcherComponent,
 	BrnCalendarDaysOfTheWeekComponent,
 	BrnCalendarTableBodyComponent,
+	BrnCalendarCellDirective,
 ] as const;
 
 @NgModule({
