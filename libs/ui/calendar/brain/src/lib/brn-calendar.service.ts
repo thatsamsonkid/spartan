@@ -1,5 +1,6 @@
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
-import { DateService } from './agnostic-date-ops/date.service';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { DateService } from './date.service';
 
 @Injectable()
 export class BrnCalendarService {
@@ -8,75 +9,74 @@ export class BrnCalendarService {
 		id: string;
 		mode: 'single' | 'multiple' | 'range';
 		selectedDate: Date | null;
-		selectedYear: Date | null;
+		previewDate: Date;
 		minDate: Date | null;
 		maxDate: Date | null;
 		startAt: Date | null;
-		startView: 'month' | 'months' | 'year';
+		startView: 'days' | 'months' | 'year';
 		dateFilter?: (d: Date) => boolean | null;
 		daysOfTheWeek: string[];
-		currentMonthYear: Date | null;
-		currentMonthYearDays: Array<Array<Date | null>> | null;
+		calendarWeeks: Array<Array<{ disabled: boolean; date: Date | null; number: number | null } | null>> | null;
+		disabledDates: Date[];
 		locale: string;
-		years: Date[][] | null;
-		view: 'month' | 'months' | 'year';
+		months: { name: string; index: number; disabled: boolean }[][] | null;
+		years: number[][] | null;
+		view: 'days' | 'months' | 'year';
 	}>({
 		id: '',
 		mode: 'single',
 		selectedDate: null,
-		selectedYear: null,
+		previewDate: new Date(), // Preview date is used for calendar navigation 'current' date
 		minDate: null,
 		maxDate: null,
 		startAt: null,
-		startView: 'month',
+		startView: 'days',
 		daysOfTheWeek: [],
-		currentMonthYear: null,
-		currentMonthYearDays: null,
+		disabledDates: [],
+		calendarWeeks: null,
+		months: [],
 		years: [], // Array for keeping the current years for given year range
 		locale: 'en-US', // Only default value
-		view: 'month',
+		view: 'days',
 	});
 
 	public readonly id = computed(() => this.state().id);
 	public readonly mode = computed(() => this.state().mode);
 	public readonly selectedDate = computed(() => this.state().selectedDate);
-	public readonly selectedYear = computed(() => this.state().selectedYear);
 	public readonly minDate = computed(() => this.state().minDate);
 	public readonly maxDate = computed(() => this.state().maxDate);
 	public readonly startAt = computed(() => this.state().startAt);
 	public readonly startView = computed(() => this.state().startView);
 	public readonly daysOfTheWeek = computed(() => this.state().daysOfTheWeek);
-	public readonly currentMonthYear = computed(() => this.state().currentMonthYear);
-	public readonly currentMonthYearDays = computed(() => this.state().currentMonthYearDays);
+
+	public readonly calendarWeeks = computed(() => this.state().calendarWeeks);
+
+	public readonly disabledDates = computed(() => this.state().disabledDates);
+	public readonly previewDate = computed(() => this.state().previewDate);
 	public readonly locale = computed(() => this.state().locale);
 	public readonly view = computed(() => this.state().view);
+	public readonly months = computed(() => this.state().months);
 	public readonly years = computed(() => this.state().years);
 
-	public readonly currentMonth = computed(() => {
-		const currentMonthYear = this.currentMonthYear();
-		return currentMonthYear ? this._dateService.getMonth(currentMonthYear) : null;
-	});
+	// Used for generating tables
+	public days$ = computed(() => this.getDaysInMonth(this.previewDate()));
+	public months$ = computed(() => this.getLocalizedMonths());
+	public previewDate$ = toObservable(this.previewDate);
 
-	public readonly currentMonthName = computed(() => {
-		const currentMonthYear = this.currentMonthYear();
-		console.log(currentMonthYear);
-		return currentMonthYear ? this._dateService.getMonthName(currentMonthYear, this.locale()) : null;
-	});
+	private getDaysInMonth(date: Date): number[] {
+		const year = date.getFullYear();
+		const month = date.getMonth();
+		const daysInMonth = new Date(year, month + 1, 0).getDate();
+		return Array.from({ length: daysInMonth }, (_, i) => i + 1);
+	}
 
-	public readonly currentYear = computed(() => {
-		const currentMonthYear = this.currentMonthYear();
-		console.log(currentMonthYear);
-		return currentMonthYear ? this._dateService.getYear(currentMonthYear) : null;
-	});
+	private getLocalizedMonths(): string[] {
+		const formatter = new Intl.DateTimeFormat(this.locale() || 'en-US', { month: 'short' });
+		return Array.from({ length: 12 }, (_, i) => formatter.format(new Date(0, i)));
+	}
 
 	private readonly yearsPerPage = 24;
 	private readonly yearsPerRow = 4;
-
-	constructor() {
-		effect(() => {
-			console.log('We updated: ', this.currentMonthYear());
-		});
-	}
 
 	/**
 	 * Getters
@@ -90,7 +90,7 @@ export class BrnCalendarService {
 		return this._dateService.today();
 	}
 
-	isToday(date: Date): boolean {
+	isToday(date: Date | null | undefined): boolean {
 		const today = this._dateService.today();
 		if (
 			date &&
@@ -113,28 +113,15 @@ export class BrnCalendarService {
 		}));
 	}
 
-	public updateCurrentMonthYear(currentMonthYear: Date | null): void {
-		this.state.update((state) => ({
-			...state,
-			currentMonthYear: currentMonthYear ? new Date(currentMonthYear) : null,
-		}));
-	}
-
-	public updateCurrentMonthYearDays(currentMonthYearDays: Array<Array<Date | null>> | null): void {
-		this.state.update((state) => ({
-			...state,
-			currentMonthYearDays,
-		}));
-	}
-
-	public updateView(view: 'month' | 'year'): void {
+	// Create a type
+	public updateView(view: 'days' | 'months' | 'year'): void {
 		this.state.update((state) => ({
 			...state,
 			view,
 		}));
 	}
 
-	public updateYears(years: Date[][]): void {
+	public updateYears(years: number[][]): void {
 		this.state.update((state) => ({
 			...state,
 			years,
@@ -144,31 +131,45 @@ export class BrnCalendarService {
 	public updateSelectedDate(selectedDate: Date): void {
 		this.state.update((state) => ({
 			...state,
-			selectedDate,
+			previewDate: selectedDate,
+			selectedDate: selectedDate,
 		}));
 	}
 
-	public updateSelectedYear(selectedYear: number): void {
+	public updateSelectedMonth(monthIndex: number): void {
+		this.state.update((state) => ({
+			...state,
+			previewDate: new Date(state.previewDate.getFullYear(), monthIndex, 1),
+			view: 'days',
+		}));
+	}
+
+	public updateCalendarWeeks(calendarWeeks: { date: Date | null; number: number | null; disabled: boolean }[][]): void {
+		this.state.update((state) => ({ ...state, calendarWeeks }));
+	}
+
+	public updatePreviewDateYear(selectedYear: number): void {
 		// Mat lib defaults to emitting month and year selections with
 		// the current selected date. if null assumes first day of year
-		this.state.update((state) => {
-			// if selected date null assume new brand new date with selected year
-			if (!state.selectedDate) {
-				return {
-					...state,
-					selectedYear: new Date(selectedYear, 0, 1),
-					view: 'months',
-				};
-			}
-			// use selectedDate as base date to emit newly selected year
-			const newlySelectedDateYear = new Date(state.selectedDate.getTime());
-			newlySelectedDateYear.setFullYear(selectedYear);
-			return {
-				...state,
-				selectedYear: newlySelectedDateYear,
-				view: 'months',
-			};
-		});
+		this.state.update((state) => ({
+			...state,
+			previewDate: new Date(selectedYear, state.previewDate.getMonth(), 1),
+			view: 'months',
+		}));
+	}
+
+	private updateMonths(months: { name: string; index: number; disabled: boolean }[][]): void {
+		this.state.update((state) => ({
+			...state,
+			months,
+		}));
+	}
+
+	private updatePreviewDate(previewDate: Date): void {
+		this.state.update((state) => ({
+			...state,
+			previewDate,
+		}));
 	}
 
 	/**
@@ -187,143 +188,108 @@ export class BrnCalendarService {
 		this.updateDaysOfTheWeek(daysOfTheWeek);
 	}
 
-	public generateCalendar(): Array<Array<Date | null>> {
-		this.generateDaysOfWeek();
-		const currentMonthYearDate =
-			(this.currentMonthYear() || this.selectedDate()) ?? this._dateService.firstOfCurrentMonthYear();
+	generateCalendar(): void {
+		const firstDayOfMonth = new Date(this.previewDate().getFullYear(), this.previewDate().getMonth(), 1);
+		const firstDayWeekday = firstDayOfMonth.getDay();
+		const daysInMonth = this.days$().length;
 
-		console.log(currentMonthYearDate);
+		// this.calendarWeeks = [];
+		const calendarWeeks = [];
+		let currentWeek: { number: number | null; date: Date | null; disabled: boolean }[] = [];
 
-		//This ensures this is in sync especially on initialization
-		// Break reference with new date
-		this.updateCurrentMonthYear(new Date(currentMonthYearDate));
-		const daysInMonth = this._dateService.getDaysInMonth(currentMonthYearDate);
-
-		const calendar: Array<Array<Date | null>> = [];
-		let week: Array<Date | null> = [];
-
-		// Fill the first week with empty days if the month doesn't start on Sunday
-		const firstDay = daysInMonth[0].getDay();
-		for (let i = 0; i < firstDay; i++) {
-			week.push(null);
+		for (let i = 0; i < firstDayWeekday; i++) {
+			currentWeek.push({ number: null, date: null, disabled: true });
 		}
 
-		for (const day of daysInMonth) {
-			if (week.length === 7) {
-				calendar.push(week);
-				week = [];
+		for (let day = 1; day <= daysInMonth; day++) {
+			const date = new Date(this.previewDate().getFullYear(), this.previewDate().getMonth(), day);
+			const disabled = this.isDateDisabled(date);
+			currentWeek.push({ number: day, date, disabled });
+
+			if (currentWeek.length === 7) {
+				calendarWeeks.push(currentWeek);
+				currentWeek = [];
 			}
-			week.push(day);
 		}
 
-		// Fill the last week with empty days if needed
-		while (week.length < 7) {
-			week.push(null);
+		if (currentWeek.length > 0) {
+			while (currentWeek.length < 7) {
+				currentWeek.push({ number: null, date: null, disabled: true });
+			}
+			calendarWeeks.push(currentWeek);
 		}
-		calendar.push(week);
+		this.updateCalendarWeeks(calendarWeeks);
+	}
 
-		this.updateCurrentMonthYearDays(calendar);
-		return calendar;
+	isDateDisabled(date: Date): boolean {
+		return this.disabledDates().some(
+			(disabledDate) =>
+				disabledDate.getFullYear() === date.getFullYear() &&
+				disabledDate.getMonth() === date.getMonth() &&
+				disabledDate.getDate() === date.getDate(),
+		);
 	}
 
 	generateMonthsArray() {
-		// Try to get year from 1 of 2 locations otherwise any year is fine
-		const year = this.selectedDate()?.getFullYear() || this.selectedYear()?.getFullYear() || 2024;
-		const monthsArray = [];
-		let monthIndex = 0; // Months are zero-indexed in JavaScript Date objects
+		const months = this.months$();
+		const monthRows = [];
+		let row: { name: string; index: number; disabled: boolean }[] = [];
 
-		for (let row = 0; row < 3; row++) {
-			const rowArray = [];
-			for (let col = 0; col < 4; col++) {
-				// Create a Date object for the first day of the current month
-				const date = new Date(year, monthIndex, 1);
-				rowArray.push(date);
-				monthIndex++;
+		months.forEach((month, index) => {
+			row.push({ name: month, index, disabled: false });
+			if (row.length === 3) {
+				monthRows.push(row);
+				row = [];
 			}
-			monthsArray.push(rowArray);
-		}
+		});
 
-		return monthsArray;
+		if (row.length > 0) {
+			monthRows.push(row);
+		}
+		this.updateMonths(monthRows);
 	}
 
-	public updateCalendar(newMonthDate: Date): void {
-		const daysInMonth = this._dateService.getDaysInMonth(newMonthDate);
-
-		const calendar: Array<Array<Date | null>> = [];
-		let week: Array<Date | null> = [];
-
-		// Fill the first week with empty days if the month doesn't start on Sunday
-		const firstDay = daysInMonth[0].getDay();
-		for (let i = 0; i < firstDay; i++) {
-			week.push(null);
-		}
-
-		for (const day of daysInMonth) {
-			if (week.length === 7) {
-				calendar.push(week);
-				week = [];
-			}
-			week.push(day);
-		}
-
-		// Fill the last week with empty days if needed
-		while (week.length < 7) {
-			week.push(null);
-		}
-		calendar.push(week);
-
-		this.updateCurrentMonthYearDays(calendar);
-	}
-
+	// TODO: Maybe move this to cell directive
 	public updateSelection(value: any) {
-		console.log(value);
-		//1. Depending on current view emit correct event
-		//2. if month-day-view emit date selections
-		// const currentMonthYear = this.currentMonthYear();
 		if (this.view() === 'months') {
-			// const newMonthDate = this._dateService.adjustMonth(currentMonthYear, 1);
-			// this.updateCurrentMonthYear(newMonthDate);
-			// this.updateCalendar(newMonthDate);
+			this.updateSelectedMonth(value);
 		} else if (this.view() === 'year') {
-			this.updateSelectedYear(value);
-			// const newYearDate = this._dateService.addCalendarYears(currentMonthYear, this.yearsPerPage);
-			// this.updateCurrentMonthYear(newYearDate);
-			// this.generateYears();
-			// console.log(this.years());
+			this.updatePreviewDateYear(value);
 		} else {
-			// Assume day view
 			this.updateSelectedDate(value);
 		}
 	}
 
 	public onNext(): void {
-		const currentMonthYear = this.currentMonthYear();
-		if (this.view() === 'month' && currentMonthYear) {
+		const currentMonthYear = this.previewDate();
+		if (this.view() === 'days' && currentMonthYear) {
 			const newMonthDate = this._dateService.adjustMonth(currentMonthYear, 1);
-			this.updateCurrentMonthYear(newMonthDate);
-			this.updateCalendar(newMonthDate);
+			this.updatePreviewDate(newMonthDate);
 		} else if (this.view() === 'year' && currentMonthYear) {
 			const newYearDate = this._dateService.addCalendarYears(currentMonthYear, this.yearsPerPage);
-			this.updateCurrentMonthYear(newYearDate);
-			this.generateYears();
+			this.updatePreviewDate(newYearDate);
+		} else if (this.view() === 'months' && currentMonthYear) {
+			const newYearDate = this._dateService.addCalendarMonths(currentMonthYear, 12);
+			this.updatePreviewDate(newYearDate);
 		}
 	}
 
 	public onPrevious(): void {
-		const currentMonthYear = this.currentMonthYear();
-		if (this.view() === 'month' && currentMonthYear) {
+		const currentMonthYear = this.previewDate();
+		if (this.view() === 'days' && currentMonthYear) {
 			const newMonthDate = this._dateService.adjustMonth(currentMonthYear, -1);
-			this.updateCurrentMonthYear(newMonthDate);
-			this.updateCalendar(newMonthDate);
+			this.updatePreviewDate(newMonthDate);
 		} else if (this.view() === 'year' && currentMonthYear) {
 			const newYearDate = this._dateService.addCalendarYears(currentMonthYear, -this.yearsPerPage);
-			this.updateCurrentMonthYear(newYearDate);
-			this.generateYears();
+			this.updatePreviewDate(newYearDate);
+		} else if (this.view() === 'months' && currentMonthYear) {
+			const newYearDate = this._dateService.addCalendarMonths(currentMonthYear, -12);
+			this.updatePreviewDate(newYearDate);
 		}
 	}
 
 	public generateYears(): void {
-		const monthYear = this.currentMonthYear();
+		const monthYear = this.previewDate();
 		if (monthYear && this._dateService.isDate(monthYear)) {
 			// // We want a range years such that we maximize the number of
 			// // enabled dates visible at once. This prevents issues where the minimum year
@@ -336,7 +302,8 @@ export class BrnCalendarService {
 			for (let i = 0, row: number[] = []; i < this.yearsPerPage; i++) {
 				row.push(minYearOfPage + i);
 				if (row.length === this.yearsPerRow) {
-					years.push(row.map((year) => new Date(year, 0)));
+					// years.push(row.map((year) => new Date(year, 0)));
+					years.push(row.map((year) => year));
 					row = [];
 				}
 			}
@@ -345,7 +312,18 @@ export class BrnCalendarService {
 	}
 
 	public switchView(): void {
-		this.updateView(this.view() === 'year' ? 'month' : 'year');
+		this.updateView(this.view() === 'year' ? 'months' : 'year');
+	}
+
+	public areDatesEqual(date1: Date | null, date2: Date | null): boolean {
+		if (!date1 || !date2) {
+			return false;
+		}
+		return (
+			date1.getFullYear() === date2.getFullYear() &&
+			date1.getMonth() === date2.getMonth() &&
+			date1.getDate() === date2.getDate()
+		);
 	}
 
 	/**

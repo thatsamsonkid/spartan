@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class DateService {
-	// private dateOps = inject(DATE_OPS);
-
 	today() {
 		return new Date();
 	}

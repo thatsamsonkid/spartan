@@ -16,9 +16,17 @@ import { BrnCalendarService } from './brn-calendar.service';
 export class BrnCalendarCellDirective {
 	private _brnCalendarService = inject(BrnCalendarService);
 
-	protected selected = computed(() => this._brnCalendarService.selectedDate() === this.value());
+	protected selected = computed(() => {
+		if (this._brnCalendarService.view() === 'days') {
+			if (this._brnCalendarService.areDatesEqual(this._brnCalendarService.selectedDate(), this.value())) {
+				console.log('Date', this._brnCalendarService.selectedDate(), this.value());
+			}
+			return this._brnCalendarService.areDatesEqual(this._brnCalendarService.selectedDate(), this.value());
+		}
+		return false;
+	});
 
-	value = input();
+	value = input<Date | null>(null);
 
 	constructor() {
 		rxHostPressedListener()

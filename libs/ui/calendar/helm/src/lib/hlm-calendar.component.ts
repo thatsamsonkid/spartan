@@ -1,19 +1,7 @@
 import { NgClass } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
-import {
-	BrnCalendarDaysOfTheWeekComponent,
-	BrnCalendarDirective,
-	BrnCalendarDisplayComponent,
-	BrnCalendarHeaderDirective,
-	BrnCalendarMonthYearComponent,
-	BrnCalendarNextBtnDirective,
-	BrnCalendarPreviousBtnDirective,
-	BrnCalendarService,
-	BrnCalendarTableBodyComponent,
-	BrnCalendarViewSwitcherComponent,
-	BrnCalendarYearDisplayComponent,
-} from '@spartan-ng/ui-calendar-brain';
+import { BrnCalendarDirective, BrnCalendarModule, BrnCalendarService } from '@spartan-ng/ui-calendar-brain';
 import { HlmIconComponent, provideIcons } from '@spartan-ng/ui-icon-helm';
 import { HlmCalendarDayCellDirective } from './hlm-calendar-day-cell.directive';
 import { HlmCalendarHeaderComponent } from './hlm-calendar-header.component';
@@ -28,16 +16,7 @@ import { HlmCalendarPreviousButtonDirective } from './hlm-calendar-previous-butt
 		class: 'block p-3 rounded-md border max-w-fit',
 	},
 	imports: [
-		BrnCalendarDirective,
-		BrnCalendarHeaderDirective,
-		BrnCalendarViewSwitcherComponent,
-		BrnCalendarMonthYearComponent,
-		BrnCalendarPreviousBtnDirective,
-		BrnCalendarNextBtnDirective,
-		BrnCalendarYearDisplayComponent,
-		BrnCalendarDisplayComponent,
-		BrnCalendarDaysOfTheWeekComponent,
-		BrnCalendarTableBodyComponent,
+		BrnCalendarModule,
 		HlmCalendarHeaderComponent,
 		HlmCalendarPreviousButtonDirective,
 		HlmCalendarNextButtonDirective,
@@ -87,19 +66,6 @@ import { HlmCalendarPreviousButtonDirective } from './hlm-calendar-previous-butt
 			</ng-template>
 
 		<!-- Maybe change this month display  -->
-		 @if(view() === 'year'){
-			<table brnCalendarDisplay class="w-full border-collapse space-y-1 flex flex-col">
-				<brn-calendar-year-display [yearTemplate]="yearCellTemplate" hlm/>
-		 	</table>
-
-		 } @else if(view() === 'months') { 
-			<p>Months of the year</p>
-		 } @else {
-			<!-- Add a hlm weekdaycell directive
-			Add a hlm dayCell directive
-			Add a brn dayCell directive
-			Add a hlm dayCell directive -->
-
 			<table brnCalendarDisplay class="w-full border-collapse space-y-1 flex flex-col">
 				<brn-calendar-days-of-the-week [dayOfWeekCelltemplate]="dayOfWeekTemplate" hlm/>
 				<brn-calendar-table-body [dayCellTemplate]="dayOfMonthTemplate" hlm/>
@@ -120,9 +86,6 @@ import { HlmCalendarPreviousButtonDirective } from './hlm-calendar-previous-butt
                 <td class="w-9" role="presentation"></td>
 				}
 			</ng-template>
-
-
-		 }
 		</div>
 	</div>
 		`,

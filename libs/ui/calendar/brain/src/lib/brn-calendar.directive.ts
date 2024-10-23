@@ -1,6 +1,6 @@
-import { Directive, type OnInit, effect, inject, input, output } from '@angular/core';
-import { DateService } from './agnostic-date-ops/date.service';
+import { Directive, type OnInit, inject, input, output } from '@angular/core';
 import { BrnCalendarService } from './brn-calendar.service';
+import { DateService } from './date.service';
 
 let uniqueId = 0;
 
@@ -17,7 +17,7 @@ export class BrnCalendarDirective implements OnInit {
 	minDate = input<Date | null>(null);
 	maxDate = input<Date | null>(null);
 	startAt = input<Date | null>(null);
-	startView = input<'month' | 'year'>('month');
+	startView = input<'days' | 'months' | 'year'>('days');
 	dateFilter = input<(d: Date) => boolean>();
 	locale = input<string>(this._brnCalendarService.getLocale());
 	weekStartsOn = input<1 | 2 | 3 | 4 | 5 | 6 | 7>();
@@ -30,19 +30,23 @@ export class BrnCalendarDirective implements OnInit {
 	viewChanged = output();
 	yearSelected = output<number | null>();
 
-	constructor() {
-		effect(() => {
-			this.selectedChange.emit(this._brnCalendarService.selectedDate());
-		});
-
-		effect(() => {
-			this.monthSelected.emit(this._brnCalendarService.currentMonth());
-		});
-
-		effect(() => {
-			this.yearSelected.emit(this._brnCalendarService.currentYear());
-		});
-	}
+	// constructor() {
+	// effect(() => {
+	// 	console.log('fnkdjsfnk', this._brnCalendarService.selectedDate());
+	// 	this.selectedChange.emit(this._brnCalendarService.selectedDate());
+	// });
+	// effect(() => {
+	// 	this.monthSelected.emit(this._brnCalendarService.currentMonth());
+	// });
+	// effect(() => {
+	// 	this.yearSelected.emit(this._brnCalendarService.currentYear());
+	// });
+	// effect(() => {
+	// 	if (this._brnCalendarService.currentMonthYear()) {
+	// 		this._brnCalendarService.generateCalendar();
+	// 	}
+	// });
+	// }
 
 	ngOnInit(): void {
 		this._brnCalendarService.state.update((state) => ({

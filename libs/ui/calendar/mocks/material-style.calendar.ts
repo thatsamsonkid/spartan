@@ -1,6 +1,6 @@
-import { Component, type OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { provideIcons } from '@ng-icons/core';
-import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
+import { lucideChevronDown, lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { BrnCalendarDirective, BrnCalendarModule, BrnCalendarService } from '../brain/src';
 import { HlmCalendarModule } from '../helm/src';
@@ -13,30 +13,27 @@ import { HlmCalendarModule } from '../helm/src';
 		class: 'block p-3 rounded-md border max-w-fit',
 	},
 	imports: [BrnCalendarModule, HlmCalendarModule, HlmIconComponent],
-	providers: [provideIcons({ lucideChevronLeft, lucideChevronRight })],
+	providers: [provideIcons({ lucideChevronLeft, lucideChevronRight, lucideChevronDown })],
 	template: `
-		<div class="flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0">
+		<div class="flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 h-[354px]">
 			<div class="space-y-4">
 				<brn-calendar-header hlm>
-					<!-- Probably pick one of these Calendar Header Displays or we canjust have a switch case or something -->
-					<!-- 1. Similar to material will be a button to switch between views-->
-					<brn-calendar-view-switcher>
-						<!-- This will render the actual month year or year range content depending on view-->
+					<brn-calendar-view-switcher class="flex justify-center items-center gap-1 hover:bg-accent hover:text-accent-foreground rounded-full px-2 h-7">
 						<brn-calendar-month-year/>
+						<hlm-icon size="sm" name="lucideChevronDown" />
 					</brn-calendar-view-switcher>
 					
-					<div class="flex gap-1">
-						<brn-calendar-previous-btn hlm>
+					<div class="flex">
+						<brn-calendar-previous-btn class="inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-7 w-7 bg-transparent p-0">
 								<hlm-icon size="sm" name="lucideChevronLeft" />
 						</brn-calendar-previous-btn>
 
-						<brn-calendar-next-btn hlm>
+						<brn-calendar-next-btn class="inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-7 w-7 bg-transparent p-0">
 								<hlm-icon size="sm" name="lucideChevronRight" />
 						</brn-calendar-next-btn> 
 					</div>
 				</brn-calendar-header>
 
-				<!-- Maybe change this month display  -->
 		 @if(view() === 'year'){
 			<table brnCalendarDisplay class="w-full border-collapse space-y-1 flex flex-col">
 				<brn-calendar-year-display [yearTemplate]="yearCellTemplate" hlm/>
@@ -45,8 +42,8 @@ import { HlmCalendarModule } from '../helm/src';
 			<ng-template #yearCellTemplate let-year>
 				@if(year){
                  <td class="rounded-md w-16 font-normal text-[1.4rem]" role="presentation">
-					<button  hlmCalendarDayCell [value]="year?.getFullYear()">
-						{{year?.getFullYear()}}
+					<button  hlmCalendarDayCell [value]="year">
+						{{year}}
 					</button>
 				</td>
 				} @else {
@@ -55,28 +52,13 @@ import { HlmCalendarModule } from '../helm/src';
 			</ng-template>
 
 		 } @else if(view() === 'months') { 
-			<p>Month of the year</p>
-			<table>
-			<tbody role="rowgroup">
-            @for(week of this.currentMonthYearDays();  track $index){
-                <tr class="flex w-full mt-2">
-                    @for(day of week;  let idx = $index; track $index + idx ){
-                        @if(dayCellTemplate()){
-                            <ng-container *ngTemplateOutlet="dayCellTemplate(); context: { $implicit: day,isToday: _brnCalendarService.isToday(day) }"></ng-container>
-                        } @else {
-                            <td><button>{{day?.getDate()}} </button></td>
-                        }
-                    }
-                </tr>
-            }
-        </tbody>
-		</table>
+			<table brnCalendarDisplay class="w-full border-collapse space-y-1 flex flex-col">
+				 <brn-calendar-month-display hlm [monthTemplate]="monthTemplate"/>
+				<ng-template #monthTemplate let-month let-index=index>
+					<td><button hlmCalendarDayCell  [value]="index" class="w-14 h-9 rounded-full hover:bg-accent hover:text-accent-foreground">{{month}}</button></td>
+				</ng-template>
+		 	</table>
 		 } @else {
-			<!-- Add a hlm weekdaycell directive
-			Add a hlm dayCell directive
-			Add a brn dayCell directive
-			Add a hlm dayCell directive -->
-
 			<table brnCalendarDisplay class="w-full border-collapse space-y-1 flex flex-col">
 				<brn-calendar-days-of-the-week [dayOfWeekCelltemplate]="dayOfWeekTemplate" hlm/>
 				<brn-calendar-table-body [dayCellTemplate]="dayOfMonthTemplate" hlm/>
@@ -101,9 +83,7 @@ import { HlmCalendarModule } from '../helm/src';
 			</div>
 			</div>`,
 })
-export class MaterialStyleCalendarComponent implements OnInit {
+export class MaterialStyleCalendarComponent {
 	private _brnCalendarService = inject(BrnCalendarService);
 	view = this._brnCalendarService.view;
-
-	ngOnInit(): void {}
 }

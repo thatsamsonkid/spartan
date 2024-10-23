@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, type TemplateRef, computed, effect, inject, input } from '@angular/core';
+import { Component, type TemplateRef, computed, inject, input } from '@angular/core';
 import { BrnCalendarService } from './brn-calendar.service';
 
 @Component({
@@ -11,9 +11,9 @@ import { BrnCalendarService } from './brn-calendar.service';
                 <tr class="flex w-full mt-2">
                     @for(year of yearRow; let idx = $index; track $index + idx){
                         @if(yearTemplate()){
-                            <ng-container *ngTemplateOutlet="yearTemplate(); context: { $implicit: year }"/>
+                            <ng-container *ngTemplateOutlet="yearTemplate() ?? null; context: { $implicit: year }"/>
                         } @else {
-                            <td><button>{{year?.getFullYear()}} </button></td>
+                            <td><button>{{year}} </button></td>
                         }
                     }
                 </tr>
@@ -26,13 +26,9 @@ export class BrnCalendarYearDisplayComponent {
 
 	protected years = computed(() => this.brnCalendarService.years());
 
-	yearTemplate = input<TemplateRef<HTMLElement>>();
+	readonly yearTemplate = input<TemplateRef<{ $implicit: number }>>();
 
 	constructor() {
 		this.brnCalendarService.generateYears();
-
-		effect(() => {
-			console.log(this.yearTemplate());
-		});
 	}
 }
