@@ -9,7 +9,7 @@ import { injectBrnStepper } from './brn-stepper.token';
 	host: {
 		type: 'button',
 		tabindex: '-1',
-		'[disabled]': '!_canStep()',
+		'[attr.disabled]': '!_canStep() ? "" : null',
 		'[attr.data-disabled]': '!_canStep() ? "" : null',
 		'(pointerdown)': '_onPointerDown($event)',
 		'(pointerup)': '_stopRepeat()',
