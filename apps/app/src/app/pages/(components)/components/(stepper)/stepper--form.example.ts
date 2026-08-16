@@ -13,7 +13,7 @@ import { HlmStepperImports } from '@spartan-ng/helm/stepper';
 			<hlm-field-group>
 				<hlm-field>
 					<label hlmFieldLabel for="quantity">Quantity</label>
-					<hlm-stepper id="quantity" [min]="0" [max]="99" [formField]="form.quantity" />
+					<hlm-stepper id="quantity" [formField]="form.quantity" />
 					<p hlmFieldDescription>How many items to order.</p>
 				</hlm-field>
 				<hlm-field orientation="horizontal">
