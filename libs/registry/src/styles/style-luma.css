@@ -1110,6 +1110,19 @@
 		@apply rounded-2xl!;
 	}
 
+	/* MARK: Stepper */
+	.spartan-stepper {
+		@apply border-input dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 has-[[data-slot=stepper-input]:focus-visible]:border-ring has-[[data-slot=stepper-input]:focus-visible]:ring-ring/50 data-[matches-spartan-invalid=true]:border-destructive data-[matches-spartan-invalid=true]:ring-destructive/20 dark:data-[matches-spartan-invalid=true]:ring-destructive/40 h-8 rounded-md border transition-colors focus-visible:ring-3 has-[[data-slot=stepper-input]:focus-visible]:ring-3 data-[disabled]:opacity-50 data-[matches-spartan-invalid=true]:ring-3;
+	}
+
+	.spartan-stepper-input {
+		@apply text-foreground placeholder:text-muted-foreground;
+	}
+
+	.spartan-stepper-value {
+		@apply text-foreground;
+	}
+
 	/* MARK: Table */
 	.spartan-table-container {
 		@apply relative w-full overflow-x-auto;

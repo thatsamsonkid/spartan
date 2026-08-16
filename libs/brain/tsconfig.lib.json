@@ -8,6 +8,15 @@
 		"types": [],
 		"moduleResolution": "bundler"
 	},
-	"exclude": ["**/*.spec.ts", "test-setup.ts", "vite.config.mts", "**/*.test.ts", "src/testing/**"],
-	"include": ["**/*.ts"]
+	"exclude": [
+		"**/*.spec.ts",
+		"test-setup.ts",
+		"vite.config.mts",
+		"**/*.test.ts",
+		"src/testing/**",
+		"stepper/**/*.spec.ts",
+		"stepper/**/*.test.ts",
+		"stepper/src/testing/**"
+	],
+	"include": ["**/*.ts", "stepper/**/*.ts"]
 }

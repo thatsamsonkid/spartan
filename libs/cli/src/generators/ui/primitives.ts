@@ -51,6 +51,7 @@ export type Primitive =
 	| 'slider'
 	| 'sonner'
 	| 'spinner'
+	| 'stepper'
 	| 'switch'
 	| 'table'
 	| 'tabs'

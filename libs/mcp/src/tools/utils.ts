@@ -64,6 +64,7 @@ export const KNOWN_COMPONENTS: string[] = [
 	'slider',
 	'sonner',
 	'spinner',
+	'stepper',
 	'switch',
 	'table',
 	'tabs',

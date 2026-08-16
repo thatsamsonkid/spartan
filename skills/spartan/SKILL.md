@@ -120,7 +120,7 @@ Read the rule file before doing the related work:
 | Need                   | Component(s)                                                                                |
 | ---------------------- | ------------------------------------------------------------------------------------------- |
 | Action / button        | `button` (`hlmBtn`), `button-group`                                                         |
-| Text/number input      | `input`, `textarea`, `input-otp`, `input-group`, `native-select`                            |
+| Text/number input      | `input`, `textarea`, `input-otp`, `input-group`, `native-select`, `stepper`                 |
 | Choice input           | `select`, `combobox`, `autocomplete`, `radio-group`, `checkbox`, `switch`, `slider`         |
 | Toggle 2-7 options     | `toggle-group`                                                                              |
 | Form layout/validation | `field`, `label`                                                                            |
