@@ -59,6 +59,7 @@
 			"@spartan-ng/brain/input-otp": ["libs/brain/input-otp/src/index.ts"],
 			"@spartan-ng/brain/label": ["libs/brain/label/src/index.ts"],
 			"@spartan-ng/brain/navigation-menu": ["libs/brain/navigation-menu/src/index.ts"],
+			"@spartan-ng/brain/number-field": ["libs/brain/number-field/src/index.ts"],
 			"@spartan-ng/brain/overlay": ["libs/brain/overlay/src/index.ts"],
 			"@spartan-ng/brain/popover": ["libs/brain/popover/src/index.ts"],
 			"@spartan-ng/brain/progress": ["libs/brain/progress/src/index.ts"],
@@ -116,6 +117,7 @@
 			"@spartan-ng/helm/message": ["libs/helm/message/src/index.ts"],
 			"@spartan-ng/helm/native-select": ["libs/helm/native-select/src/index.ts"],
 			"@spartan-ng/helm/navigation-menu": ["libs/helm/navigation-menu/src/index.ts"],
+			"@spartan-ng/helm/number-field": ["libs/helm/number-field/src/index.ts"],
 			"@spartan-ng/helm/pagination": ["libs/helm/pagination/src/index.ts"],
 			"@spartan-ng/helm/popover": ["libs/helm/popover/src/index.ts"],
 			"@spartan-ng/helm/progress": ["libs/helm/progress/src/index.ts"],
@@ -142,9 +144,7 @@
 			"@spartan-ng/mcp": ["libs/mcp/src/index.ts"],
 			"@spartan-ng/registry": ["libs/registry/src/index.ts"],
 			"@spartan-ng/tools": ["libs/tools/src/index.ts"],
-			"@spartan-ng/trpc": ["libs/trpc/src/index.ts"],
-			"@spartan-ng/brain/stepper": ["./libs/brain/stepper/src/index.ts"],
-			"@spartan-ng/helm/stepper": ["./libs/helm/stepper/src/index.ts"]
+			"@spartan-ng/trpc": ["libs/trpc/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

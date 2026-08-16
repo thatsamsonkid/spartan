@@ -154,7 +154,7 @@ export const routeMeta: RouteMeta = {
 			<spartan-ui-api-docs docType="helm" />
 
 			<spartan-page-bottom-nav>
-				<spartan-page-bottom-nav-link href="pagination" label="Pagination" />
+				<spartan-page-bottom-nav-link href="number-field" label="Number Field" />
 				<spartan-page-bottom-nav-link direction="previous" href="native-select" label="Native Select" />
 			</spartan-page-bottom-nav>
 		</section>

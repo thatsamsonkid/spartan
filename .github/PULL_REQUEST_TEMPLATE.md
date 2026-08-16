@@ -65,6 +65,7 @@ What kind of change does this PR introduce?
 - [ ] message
 - [ ] native-select
 - [ ] navigation-menu
+- [ ] number-field
 - [ ] pagination
 - [ ] popover
 - [ ] progress
@@ -79,7 +80,6 @@ What kind of change does this PR introduce?
 - [ ] slider
 - [ ] sonner
 - [ ] spinner
-- [ ] stepper
 - [ ] switch
 - [ ] table
 - [ ] tabs

@@ -884,6 +884,19 @@
 		@apply bg-popover text-popover-foreground ring-foreground/5 dark:ring-foreground/10 rounded-3xl shadow-lg ring-1 transition-all ease-[cubic-bezier(0.22,1,0.36,1)] outline-none data-ending-style:scale-90 data-ending-style:opacity-0 data-ending-style:duration-150 data-starting-style:scale-90 data-starting-style:opacity-0;
 	}
 
+	/* MARK: Number Field */
+	.spartan-number-field {
+		@apply border-input dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 has-[[data-slot=number-field-input]:focus-visible]:border-ring has-[[data-slot=number-field-input]:focus-visible]:ring-ring/50 data-[matches-spartan-invalid=true]:border-destructive data-[matches-spartan-invalid=true]:ring-destructive/20 dark:data-[matches-spartan-invalid=true]:ring-destructive/40 h-8 rounded-md border transition-colors focus-visible:ring-3 has-[[data-slot=number-field-input]:focus-visible]:ring-3 data-[disabled]:opacity-50 data-[matches-spartan-invalid=true]:ring-3;
+	}
+
+	.spartan-number-field-input {
+		@apply text-foreground placeholder:text-muted-foreground;
+	}
+
+	.spartan-number-field-value {
+		@apply text-foreground;
+	}
+
 	/* MARK: Pagination */
 	.spartan-pagination-content {
 		@apply gap-1;
@@ -1108,19 +1121,6 @@
 	/* MARK: Sonner */
 	.spartan-toast {
 		@apply rounded-2xl!;
-	}
-
-	/* MARK: Stepper */
-	.spartan-stepper {
-		@apply border-input dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 has-[[data-slot=stepper-input]:focus-visible]:border-ring has-[[data-slot=stepper-input]:focus-visible]:ring-ring/50 data-[matches-spartan-invalid=true]:border-destructive data-[matches-spartan-invalid=true]:ring-destructive/20 dark:data-[matches-spartan-invalid=true]:ring-destructive/40 h-8 rounded-md border transition-colors focus-visible:ring-3 has-[[data-slot=stepper-input]:focus-visible]:ring-3 data-[disabled]:opacity-50 data-[matches-spartan-invalid=true]:ring-3;
-	}
-
-	.spartan-stepper-input {
-		@apply text-foreground placeholder:text-muted-foreground;
-	}
-
-	.spartan-stepper-value {
-		@apply text-foreground;
 	}
 
 	/* MARK: Table */

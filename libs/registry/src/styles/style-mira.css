@@ -926,6 +926,19 @@
 		@apply text-muted-foreground end-1.5 top-1/2 -translate-y-1.5 text-[length:--spacing(3.5)] group-data-[size=sm]/native-select:-translate-y-1.25 group-data-[size=sm]/native-select:text-[length:--spacing(3)];
 	}
 
+	/* MARK: Number Field */
+	.spartan-number-field {
+		@apply border-input dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 has-[[data-slot=number-field-input]:focus-visible]:border-ring has-[[data-slot=number-field-input]:focus-visible]:ring-ring/50 data-[matches-spartan-invalid=true]:border-destructive data-[matches-spartan-invalid=true]:ring-destructive/20 dark:data-[matches-spartan-invalid=true]:ring-destructive/40 h-8 rounded-md border transition-colors focus-visible:ring-3 has-[[data-slot=number-field-input]:focus-visible]:ring-3 data-[disabled]:opacity-50 data-[matches-spartan-invalid=true]:ring-3;
+	}
+
+	.spartan-number-field-input {
+		@apply text-foreground placeholder:text-muted-foreground;
+	}
+
+	.spartan-number-field-value {
+		@apply text-foreground;
+	}
+
 	/* MARK: Pagination */
 	.spartan-pagination-content {
 		@apply gap-0.5;
@@ -1237,19 +1250,6 @@
 	/* MARK: Sonner */
 	.spartan-toast {
 		@apply rounded-md!;
-	}
-
-	/* MARK: Stepper */
-	.spartan-stepper {
-		@apply border-input dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 has-[[data-slot=stepper-input]:focus-visible]:border-ring has-[[data-slot=stepper-input]:focus-visible]:ring-ring/50 data-[matches-spartan-invalid=true]:border-destructive data-[matches-spartan-invalid=true]:ring-destructive/20 dark:data-[matches-spartan-invalid=true]:ring-destructive/40 h-8 rounded-md border transition-colors focus-visible:ring-3 has-[[data-slot=stepper-input]:focus-visible]:ring-3 data-[disabled]:opacity-50 data-[matches-spartan-invalid=true]:ring-3;
-	}
-
-	.spartan-stepper-input {
-		@apply text-foreground placeholder:text-muted-foreground;
-	}
-
-	.spartan-stepper-value {
-		@apply text-foreground;
 	}
 
 	/* MARK: Switch */

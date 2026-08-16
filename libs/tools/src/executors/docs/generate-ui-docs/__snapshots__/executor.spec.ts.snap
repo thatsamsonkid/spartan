@@ -6026,6 +6026,198 @@ exports[`generate-ui-docs executor > produces stable output 1`] = `
       },
     },
   },
+  "number-field": {
+    "brain": {
+      "BrnNumberField": {
+        "exportAs": "brnNumberField",
+        "inputs": [
+          {
+            "name": "id",
+            "required": false,
+            "type": "string",
+          },
+          {
+            "name": "aria-label",
+            "required": false,
+            "type": "string | null",
+          },
+          {
+            "name": "aria-labelledby",
+            "required": false,
+            "type": "string | null",
+          },
+          {
+            "name": "value",
+            "required": false,
+            "type": "number | null",
+          },
+          {
+            "name": "min",
+            "required": false,
+            "type": "number | null",
+          },
+          {
+            "name": "max",
+            "required": false,
+            "type": "number | null",
+          },
+          {
+            "name": "step",
+            "required": false,
+            "type": "number",
+          },
+          {
+            "name": "disabled",
+            "required": false,
+            "type": "boolean",
+          },
+          {
+            "name": "holdRepeat",
+            "required": false,
+            "type": "boolean",
+          },
+          {
+            "name": "holdRepeatDelay",
+            "required": false,
+            "type": "number",
+          },
+          {
+            "name": "holdRepeatInterval",
+            "required": false,
+            "type": "number",
+          },
+          {
+            "name": "getValueLabel",
+            "required": false,
+            "type": "BrnNumberFieldLabelFn | null",
+          },
+        ],
+        "models": [],
+        "outputs": [
+          {
+            "name": "valueChange",
+            "type": "number | null",
+          },
+        ],
+        "selector": "[brnNumberField]",
+      },
+      "BrnNumberFieldDecrement": {
+        "exportAs": "brnNumberFieldDecrement",
+        "inputs": [],
+        "models": [],
+        "outputs": [],
+        "selector": "button[brnNumberFieldDecrement]",
+      },
+      "BrnNumberFieldIncrement": {
+        "exportAs": "brnNumberFieldIncrement",
+        "inputs": [],
+        "models": [],
+        "outputs": [],
+        "selector": "button[brnNumberFieldIncrement]",
+      },
+      "BrnNumberFieldInput": {
+        "exportAs": "brnNumberFieldInput",
+        "inputs": [],
+        "models": [],
+        "outputs": [],
+        "selector": "input[brnNumberFieldInput]",
+      },
+    },
+    "helm": {
+      "HlmNumberField": {
+        "inputs": [
+          {
+            "name": "typeable",
+            "required": false,
+            "type": "boolean",
+          },
+          {
+            "name": "placeholder",
+            "required": false,
+            "type": "string",
+          },
+          {
+            "name": "decrementAriaLabel",
+            "required": false,
+            "type": "string",
+          },
+          {
+            "name": "incrementAriaLabel",
+            "required": false,
+            "type": "string",
+          },
+          {
+            "name": "id",
+            "required": false,
+            "type": "string",
+          },
+          {
+            "name": "value",
+            "required": false,
+            "type": "number | null",
+          },
+          {
+            "name": "min",
+            "required": false,
+            "type": "number | null",
+          },
+          {
+            "name": "max",
+            "required": false,
+            "type": "number | null",
+          },
+          {
+            "name": "step",
+            "required": false,
+            "type": "number",
+          },
+          {
+            "name": "disabled",
+            "required": false,
+            "type": "boolean",
+          },
+          {
+            "name": "holdRepeat",
+            "required": false,
+            "type": "boolean",
+          },
+          {
+            "name": "holdRepeatDelay",
+            "required": false,
+            "type": "number",
+          },
+          {
+            "name": "holdRepeatInterval",
+            "required": false,
+            "type": "number",
+          },
+          {
+            "name": "getValueLabel",
+            "required": false,
+            "type": "BrnNumberFieldLabelFn | null",
+          },
+          {
+            "name": "aria-label",
+            "required": false,
+            "type": "string | null",
+          },
+          {
+            "name": "aria-labelledby",
+            "required": false,
+            "type": "string | null",
+          },
+        ],
+        "models": [],
+        "outputs": [
+          {
+            "name": "valueChange",
+            "type": "number | null",
+          },
+        ],
+        "selector": "hlm-number-field",
+      },
+    },
+  },
   "overlay": {
     "brain": {
       "BrnOverlay": {
@@ -8731,198 +8923,6 @@ exports[`generate-ui-docs executor > produces stable output 1`] = `
         "models": [],
         "outputs": [],
         "selector": "hlm-spinner",
-      },
-    },
-  },
-  "stepper": {
-    "brain": {
-      "BrnStepper": {
-        "exportAs": "brnStepper",
-        "inputs": [
-          {
-            "name": "id",
-            "required": false,
-            "type": "string",
-          },
-          {
-            "name": "aria-label",
-            "required": false,
-            "type": "string | null",
-          },
-          {
-            "name": "aria-labelledby",
-            "required": false,
-            "type": "string | null",
-          },
-          {
-            "name": "value",
-            "required": false,
-            "type": "number | null",
-          },
-          {
-            "name": "min",
-            "required": false,
-            "type": "number | null",
-          },
-          {
-            "name": "max",
-            "required": false,
-            "type": "number | null",
-          },
-          {
-            "name": "step",
-            "required": false,
-            "type": "number",
-          },
-          {
-            "name": "disabled",
-            "required": false,
-            "type": "boolean",
-          },
-          {
-            "name": "holdRepeat",
-            "required": false,
-            "type": "boolean",
-          },
-          {
-            "name": "holdRepeatDelay",
-            "required": false,
-            "type": "number",
-          },
-          {
-            "name": "holdRepeatInterval",
-            "required": false,
-            "type": "number",
-          },
-          {
-            "name": "getValueLabel",
-            "required": false,
-            "type": "BrnStepperLabelFn | null",
-          },
-        ],
-        "models": [],
-        "outputs": [
-          {
-            "name": "valueChange",
-            "type": "number | null",
-          },
-        ],
-        "selector": "[brnStepper]",
-      },
-      "BrnStepperDecrement": {
-        "exportAs": "brnStepperDecrement",
-        "inputs": [],
-        "models": [],
-        "outputs": [],
-        "selector": "button[brnStepperDecrement]",
-      },
-      "BrnStepperIncrement": {
-        "exportAs": "brnStepperIncrement",
-        "inputs": [],
-        "models": [],
-        "outputs": [],
-        "selector": "button[brnStepperIncrement]",
-      },
-      "BrnStepperInput": {
-        "exportAs": "brnStepperInput",
-        "inputs": [],
-        "models": [],
-        "outputs": [],
-        "selector": "input[brnStepperInput]",
-      },
-    },
-    "helm": {
-      "HlmStepper": {
-        "inputs": [
-          {
-            "name": "typeable",
-            "required": false,
-            "type": "boolean",
-          },
-          {
-            "name": "placeholder",
-            "required": false,
-            "type": "string",
-          },
-          {
-            "name": "decrementAriaLabel",
-            "required": false,
-            "type": "string",
-          },
-          {
-            "name": "incrementAriaLabel",
-            "required": false,
-            "type": "string",
-          },
-          {
-            "name": "id",
-            "required": false,
-            "type": "string",
-          },
-          {
-            "name": "value",
-            "required": false,
-            "type": "number | null",
-          },
-          {
-            "name": "min",
-            "required": false,
-            "type": "number | null",
-          },
-          {
-            "name": "max",
-            "required": false,
-            "type": "number | null",
-          },
-          {
-            "name": "step",
-            "required": false,
-            "type": "number",
-          },
-          {
-            "name": "disabled",
-            "required": false,
-            "type": "boolean",
-          },
-          {
-            "name": "holdRepeat",
-            "required": false,
-            "type": "boolean",
-          },
-          {
-            "name": "holdRepeatDelay",
-            "required": false,
-            "type": "number",
-          },
-          {
-            "name": "holdRepeatInterval",
-            "required": false,
-            "type": "number",
-          },
-          {
-            "name": "getValueLabel",
-            "required": false,
-            "type": "BrnStepperLabelFn | null",
-          },
-          {
-            "name": "aria-label",
-            "required": false,
-            "type": "string | null",
-          },
-          {
-            "name": "aria-labelledby",
-            "required": false,
-            "type": "string | null",
-          },
-        ],
-        "models": [],
-        "outputs": [
-          {
-            "name": "valueChange",
-            "type": "number | null",
-          },
-        ],
-        "selector": "hlm-stepper",
       },
     },
   },
