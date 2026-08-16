@@ -23,9 +23,9 @@ import { NumberFieldNonTypeable } from './number-field--non-typeable.example';
 import { NumberFieldPreview, defaultImports, defaultSkeleton } from './number-field.preview';
 
 export const routeMeta: RouteMeta = {
-	data: { breadcrumb: 'NumberField', api: 'number-field' },
-	meta: metaWith('spartan/ui - NumberField', 'A number input with increment and decrement buttons.'),
-	title: 'spartan/ui - NumberField',
+	data: { breadcrumb: 'Number Field', api: 'number-field' },
+	meta: metaWith('spartan/ui - Number Field', 'A number input with increment and decrement buttons.'),
+	title: 'spartan/ui - Number Field',
 };
 
 @Component({
@@ -52,7 +52,7 @@ export const routeMeta: RouteMeta = {
 	template: `
 		<section spartanMainSection>
 			<spartan-section-intro
-				name="NumberField"
+				name="Number Field"
 				lead="A number input with increment and decrement buttons."
 				showThemeToggle
 			/>
