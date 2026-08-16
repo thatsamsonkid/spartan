@@ -37,6 +37,7 @@ export type Primitive =
 	| 'message'
 	| 'native-select'
 	| 'navigation-menu'
+	| 'number-field'
 	| 'pagination'
 	| 'popover'
 	| 'progress'

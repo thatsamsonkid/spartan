@@ -50,6 +50,7 @@ export const KNOWN_COMPONENTS: string[] = [
 	'message',
 	'native-select',
 	'navigation-menu',
+	'number-field',
 	'pagination',
 	'popover',
 	'progress',

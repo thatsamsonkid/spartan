@@ -39,6 +39,7 @@ export const primitiveDependencies: Record<Primitive, Primitive[]> = {
 	message: ['utils'],
 	'native-select': ['utils'],
 	'navigation-menu': ['utils'],
+	'number-field': ['utils', 'button'],
 	pagination: ['utils', 'button', 'select'],
 	popover: ['utils'],
 	progress: ['utils'],

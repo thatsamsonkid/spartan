@@ -60,6 +60,7 @@ export const components: Link[] = [
 	{ label: 'Message', url: '/message', new: true },
 	{ label: 'Native Select', url: '/native-select' },
 	{ label: 'Navigation Menu', url: '/navigation-menu' },
+	{ label: 'Number Field', url: '/number-field', new: true },
 	{ label: 'Pagination', url: '/pagination' },
 	{ label: 'Popover', url: '/popover' },
 	{ label: 'Progress', url: '/progress' },

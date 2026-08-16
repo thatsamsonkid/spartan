@@ -38,6 +38,7 @@ export type PrimitiveSnippet =
 	| 'message'
 	| 'native-select'
 	| 'navigation-menu'
+	| 'number-field'
 	| 'pagination'
 	| 'popover'
 	| 'progress'
